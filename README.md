@@ -1,0 +1,13 @@
+# Reverse IK Retarget: Robot to SMPL-X
+
+Demonstration clips showcasing the retargeted SMPL-X motion reconstructed from G1 Robot motion.
+
+## Swing Demo
+<video src="https://github.com/user-attachments/assets/1030a48a-9e72-4f25-b374-dd59c1dbe700" controls loop muted playsinline style="max-width: 480px; width: 100%;"></video>
+
+## Twist Demo
+<video src="https://github.com/user-attachments/assets/72fcefd4-cbd1-463f-a0be-029262e33833" controls loop muted playsinline style="max-width: 480px; width: 100%;"></video>
+
+## Run Demo
+<video src="https://github.com/user-attachments/assets/18cb0b1c-8bfc-4601-b38c-b7c4806168c8" controls loop muted playsinline style="max-width: 480px; width: 100%;"></video>
+
