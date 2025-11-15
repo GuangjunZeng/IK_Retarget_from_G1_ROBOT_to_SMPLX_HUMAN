@@ -1,0 +1,27 @@
+#!!!先判断输出文件是否存在应该不影响处理速度吧?
+#!将csv和npz文件进行数值对比即可判断pkl——to——npz是否正确，但前提也是pkl-to-csv是正确的。
+
+#pkl to csv  单个(保持单个处理是因为这个代码文件是确定没有问题的)
+python scripts/29dof_pkl_to_csv.py --pkl /home/retarget_proj/workbench/data/locomotion/robot/ik_based/pkl/011100.pkl --out /home/retarget_proj/workbench/data/locomotion/robot/ik_based/csv/011100.csv --include-base
+python scripts/29dof_pkl_to_csv.py --pkl /home/retarget_proj/workbench/data/locomotion/robot/ik_based/pkl/007735.pkl --out /home/retarget_proj/workbench/data/locomotion/robot/ik_based/csv/007735.csv --include-base
+python scripts/29dof_pkl_to_csv.py --pkl /home/retarget_proj/workbench/data/locomotion/robot/ik_based/pkl/009322.pkl --out /home/retarget_proj/workbench/data/locomotion/robot/ik_based/csv/009322.csv --include-base
+python scripts/29dof_pkl_to_csv.py --pkl /home/retarget_proj/workbench/data/locomotion/robot/ik_based/pkl/013588.pkl --out /home/retarget_proj/workbench/data/locomotion/robot/ik_based/csv/013588.csv --include-base
+
+#pkl to npz 批量
+python scripts/29dof_pkl_to_npz_multiple.py --pkl-dir /home/retarget_proj/workbench/data/locomotion/robot/ik_based/pkl --output-dir /home/retarget_proj/workbench/data/locomotion/robot/ik_based/npz --include-base
+
+
+#修改scale方式（类似phc）
+python scripts/29dof_pkl_to_npz_multiple.py --pkl-dir /home/retarget_proj/workbench/data/locomotion/robot/ik_based/pkl_scale2 --output-dir /home/retarget_proj/workbench/data/locomotion/robot/ik_based/npz_scale2 --include-base
+
+
+
+
+
+##---csv和npz对比检查。 prompt： 你现在根据第一个指令，替换数值得到后面几个指令
+011100 ✅
+scripts/verify_npz_csv.py --csv /home/retarget_proj/workbench/data/locomotion/robot/ik_based/csv/011100.csv --npz /home/retarget_proj/workbench/data/locomotion/robot/ik_based/npz/011100.npz 
+009322 ✅
+scripts/verify_npz_csv.py --csv /home/retarget_proj/workbench/data/locomotion/robot/ik_based/csv/009322.csv --npz /home/retarget_proj/workbench/data/locomotion/robot/ik_based/npz/009322.npz
+013588 ✅
+scripts/verify_npz_csv.py --csv /home/retarget_proj/workbench/data/locomotion/robot/ik_based/csv/013588.csv --npz /home/retarget_proj/workbench/data/locomotion/robot/ik_based/npz/013588.npz

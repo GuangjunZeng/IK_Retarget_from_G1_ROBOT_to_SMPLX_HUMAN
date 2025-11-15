@@ -1,0 +1,190 @@
+!!!!!!!!!!!第一步
+conda activate gmr
+!!!!!!!!!!!
+
+原始scale::allscale!!
+先开一个tmux:
+tmux new -s smplx_robot
+bash
+conda init bash # 1. 先初始化 conda
+source ~/.bashrc  //nano ~/.zshrc
+conda activate gmr # 3. 现在可以正常激活环境了
+python scripts/smplx_to_robot_batch_allscale.py --csv_file ../data/locomotion/manifest_raw.csv --batch_save_path ../data/locomotion/robot/ik_based_scale/pkl/   --robot unitree_g1 --no_visualize --num_threads 30 --start_row 0
+tmux attach -t smplx_robot #重新打开这个会话
+tmux kill-session -t smplx_robot
+tmux ls
+
+
+
+---重新修改scale方式：：：
+先开一个tmux:
+tmux new -s smplx_robot
+bash
+conda init bash # 1. 先初始化 conda
+source ~/.bashrc  //nano ~/.zshrc
+conda activate gmr # 3. 现在可以正常激活环境了
+python scripts/smplx_to_robot.py --csv_file ../data/locomotion/manifest_raw.csv --batch_save_path ../data/locomotion/robot/ik_based/pkl_scale2/   --robot unitree_g1 --no_visualize --num_threads 30 --start_row 0
+python scripts/smplx_to_robot.py --csv_file ../data/locomotion/manifest_raw.csv --batch_save_path ../data/locomotion/robot/ik_based/pkl_scale2/   --robot unitree_g1 --no_visualize --num_threads 50 
+tmux attach -t smplx_robot #重新打开这个会话
+tmux kill-session -t smplx_robot
+tmux ls
+
+
+
+
+
+
+
+
+
+
+
+批量创建tmux会话以及开始运行:
+python create_tmux_sessions.py -c --num-sessions 1 --start-row 0
+
+
+#清空文件夹内容但保留文件夹
+rm *.pkl    #删除所有.pkl文件
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#利用metainfo批量处理
+！简单测试
+#@带可视化
+python scripts/smplx_to_robot_multiplenpz.py --csv_file scripts/test_metainfo.csv --save_path scripts/test_retarget_npz2pkl/ --visualize
+#@不带可视化处理
+python scripts/smplx_to_robot_multiplenpz.py --csv_file scripts/test_metainfo.csv --save_path scripts/test_retarget_npz2pkl/ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+还有一些潜在问题：
+❌ Error processing /data/retarget/locomotion/raw/AMASS_SMPLXG/CMU/128/male_stagei.npz: 'pose_body is not 
+a file in the archive'
+⏱️  Failed after 1.18 seconds
+❌ Failed: ../robot/ik_based/pkl/006000.pkl (failed after 1.18s)
+Use robot model:  
+/data/retarget/locomotion/GMR/general_motion_retargeting/../assets/unitree_g1/g1_mocap_29dof.xml
+这个问题不是很大，少部分数据本身有问题，有时间再check源文件
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Processing complete. Successful: 30, Failed: 1
+⏱️  Total processing time: 25865.68 seconds
+⏱️  Total execution time: 1382.19 seconds
+⏱️  Average processing time per file: 862.19 seconds
+应该有多线程运行！
+
+保存两种日志，一个是每一个PK了都有的输出，一种是只含有出现error的时候的
+读取一个npz进行check，没有对应名的pkl , 再开始进行retarget
+
+single motion:
+python scripts/smplx_to_robot.py --smplx_file /home/SSM_SMPLX/20160330_03333/ankles_stageii.npz --robot unitree_g1 --save_path  /home/SSM_SMPLX/20160330_03333/retarget_ankles_stageii.pkl --rate_limit
+python scripts/smplx_to_robot.py --smplx_file /home/SSM_SMPLX/20160330_03333/walking_stageii.npz --robot unitree_g1 --save_path  /home/SSM_SMPLX/20160330_03333/retarget_walking_stageii.pkl --rate_limit
+python scripts/smplx_to_robot.py --smplx_file /home/SSM_SMPLX/20160330_03333/side_hopping_stageii.npz --robot unitree_g1 --save_path  /home/SSM_SMPLX/20160330_03333/retarget_side_hopping_stageii.pkl --rate_limit
+
+
+a folder
+python scripts/smplx_to_robot_dataset.py --src_folder /home/SSM_SMPLX/20160330_03333 --tgt_folder /home/SSM_SMPLX/20160330_03333_retarget_pkl --robot unitree_g1
+python scripts/smplx_to_robot_dataset.py --src_folder /home/SSM_SMPLX/20160930_50032 --tgt_folder /home/SSM_SMPLX/20160930_50032_retarget_pkl --robot unitree_g1
+python scripts/smplx_to_robot_dataset.py --src_folder /home/SSM_SMPLX/20161014_50033 --tgt_folder /home/SSM_SMPLX/20161014_50033_retarget_pkl --robot unitree_g1
+
+
+再开一个tmux
+tmux new -s smplx_robot22
+python scripts/smplx_to_robot_multiplenpz.py --csv_file ../raw/manifest.csv --save_path ../robot/ik_based/pkl/   --start_row 9000  --num_threads 50
+
+
+再开一个tmux
+tmux new -s smplx_robot33
+python scripts/smplx_to_robot_multiplenpz.py --csv_file ../raw/manifest.csv --save_path ../robot/ik_based/pkl/   --start_row 11000  --num_threads 20
+
+再开一个tmux
+tmux new -s smplx_robot44
+python scripts/smplx_to_robot_multiplenpz.py --csv_file ../raw/manifest.csv --save_path ../robot/ik_based/pkl/   --start_row 13000  --num_threads 10
+
+再开一个tmux
+tmux new -s smplx_robot55
+python scripts/smplx_to_robot_multiplenpz.py --csv_file ../raw/manifest.csv --save_path ../robot/ik_based/pkl/   --start_row 15000  --num_threads 10
+
+再开一个tmux
+tmux new -s smplx_robot66
+python scripts/smplx_to_robot_multiplenpz.py --csv_file ../raw/manifest.csv --save_path ../robot/ik_based/pkl/   --start_row 17000  --num_threads 3
+
+
+再开一个tmux  
+tmux new -s smplx_robot77
+python scripts/smplx_to_robot_multiplenpz.py --csv_file ../raw/manifest.csv --save_path ../robot/ik_based/pkl/   --start_row 6000  --num_threads 3
+
+
+再开一个tmux  
+tmux new -s smplx_robot88
+python scripts/smplx_to_robot_multiplenpz.py --csv_file ../raw/manifest.csv --save_path ../robot/ik_based/pkl/   --start_row 12000  --num_threads 3
+
+
+再开一个tmux  
+tmux new -s smplx_robot99
+python scripts/smplx_to_robot_multiplenpz.py --csv_file ../raw/manifest.csv --save_path ../robot/ik_based/pkl/   --start_row 14000  --num_threads 3
+
+
+再开一个tmux  
+tmux new -s smplx_robot111
+python scripts/smplx_to_robot_multiplenpz.py --csv_file ../raw/manifest.csv --save_path ../robot/ik_based/pkl/   --start_row 16000  --num_threads 1
+
+再开一个tmux  
+tmux new -s smplx_robot222
+python scripts/smplx_to_robot_multiplenpz.py --csv_file ../raw/manifest.csv --save_path ../robot/ik_based/pkl/   --start_row 8000  --num_threads 1
+
